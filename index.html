@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrowPod AI  | AI-Powered Smart Mushroom Cultivation Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+:root{
+  --green:#2ECC71;
+  --green-dim:#27AE60;
+  --green-dark:#1A7A40;
+  --deep:#050E08;
+  --deep-mid:#0A1A10;
+  --emerald:#1DB954;
+  --emerald-dark:#158A3D;
+  --white:#FFFFFF;
+  --off-white:#F0FAF3;
+  --text-dark:#0A1F10;
+  --text-muted:#3A6B4A;
+  --card-bg:rgba(46,204,113,0.04);
+  --card-border:rgba(46,204,113,0.18);
+  --nav-h:68px;
+  --font:'Source Sans 3',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --serif:'Playfair Display',serif;
+  --transition:cubic-bezier(0.4,0,0.2,1);
+}
+
+body{font-family:var(--font);color:var(--white);background:var(--deep);overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:#050E08;}
+::-webkit-scrollbar-thumb{background:var(--green);border-radius:3px;}
+
+/* ============================================================
+   NAVBAR  index_8 style with section-button nav
+============================================================ */
+.navbar{
+  position:fixed;top:0;left:0;width:100%;height:var(--nav-h);
+  background:rgba(5,14,8,0.97);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(46,204,113,0.15);
+  z-index:900;display:flex;align-items:center;
+  padding:0 5%;justify-content:space-between;
+}
+.nav-logo{
+  font-family:var(--serif);font-size:21px;font-weight:700;
+  color:var(--green);letter-spacing:0.5px;
+  display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;
+}
+.nav-logo-icon{
+  width:34px;height:34px;background:linear-gradient(135deg,var(--green),var(--green-dark));
+  border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.nav-logo-icon svg{width:20px;height:20px;}
+.nav-logo span{color:var(--white);font-weight:400;font-family:var(--font);}
+
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none;}
+.nav-links li button{
+  background:none;border:none;
+  color:rgba(46,204,113,0.7);
+  font-size:13px;font-weight:600;
+  padding:7px 13px;border-radius:7px;
+  transition:all 0.25s;cursor:pointer;
+  font-family:var(--mono);letter-spacing:0.5px;
+  text-transform:uppercase;font-size:11px;
+  position:relative;
+}
+.nav-links li button:hover,
+.nav-links li button.active{
+  color:var(--green);background:rgba(46,204,113,0.08);
+}
+.nav-links li button.active::after{
+  content:'';position:absolute;bottom:4px;left:50%;
+  transform:translateX(-50%);width:16px;height:2px;
+  background:var(--green);border-radius:2px;
+}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-demo-nav{
+  background:linear-gradient(135deg,var(--green),var(--green-dark));
+  color:var(--deep);border:none;padding:9px 20px;border-radius:7px;
+  font-size:12px;font-weight:700;cursor:pointer;
+  transition:all 0.25s;font-family:var(--mono);
+  letter-spacing:0.5px;text-transform:uppercase;
+}
+.btn-demo-nav:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(46,204,113,0.35);}
+
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none;}
+.hamburger span{width:22px;height:2px;background:var(--green);border-radius:2px;transition:0.3s;display:block;}
+
+.mobile-nav{
+  display:none;position:fixed;top:var(--nav-h);left:0;width:100%;
+  background:rgba(5,14,8,0.99);padding:20px 6%;
+  flex-direction:column;gap:4px;z-index:899;
+  border-bottom:1px solid rgba(46,204,113,0.15);
+}
+.mobile-nav.open{display:flex;}
+.mobile-nav button{
+  background:none;border:none;color:rgba(46,204,113,0.7);
+  font-size:15px;font-weight:600;padding:12px 0;
+  border-bottom:1px solid rgba(46,204,113,0.06);
+  cursor:pointer;font-family:var(--mono);text-align:left;
+  text-transform:uppercase;letter-spacing:1px;font-size:12px;
+}
+.mobile-nav button:hover{color:var(--green);}
+
+/* ============================================================
+   PAGE SYSTEM
+============================================================ */
+.page{display:none;min-height:100vh;padding-top:var(--nav-h);}
+.page.active{display:block;animation:pageIn 0.4s var(--transition);}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* ============================================================
+   SECTION COMMONS
+============================================================ */
+.section-label{
+  display:inline-block;color:var(--green);font-size:10px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;margin-bottom:12px;font-family:var(--mono);
+}
+.section-title{font-family:var(--serif);font-size:38px;color:var(--green);line-height:1.2;margin-bottom:8px;}
+.section-divider{width:65px;height:2px;background:linear-gradient(90deg,var(--green),transparent);margin:14px 0 26px;}
+
+/* ============================================================
+   HERO
+============================================================ */
+.hero-section{
+  position:relative;padding:140px 7% 90px;background:var(--deep);
+  overflow:hidden;min-height:100vh;display:flex;align-items:center;
+}
+.hero-section::before{content:"";position:absolute;top:0;right:0;width:280px;height:280px;background:var(--green);opacity:0.06;clip-path:polygon(100% 0,0 0,100% 100%);}
+.hero-section::after{content:"";position:absolute;bottom:0;left:0;width:300px;height:300px;background:var(--emerald);opacity:0.05;clip-path:polygon(0 100%,0 0,100% 100%);}
+.hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(46,204,113,0.05) 0%,transparent 70%);pointer-events:none;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(46,204,113,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(46,204,113,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-container{max-width:1200px;margin:auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:70px;align-items:center;position:relative;z-index:2;width:100%;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.3);color:var(--green);font-size:10px;font-weight:700;letter-spacing:3px;padding:6px 16px;border-radius:3px;text-transform:uppercase;margin-bottom:18px;font-family:var(--mono);}
+.hero-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulsedot 1.5s ease-in-out infinite;}
+@keyframes pulsedot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.6);}}
+.hero-left h1{font-family:var(--serif);font-size:50px;line-height:1.12;color:var(--green);margin-bottom:8px;}
+.hero-left h1 span{color:var(--white);}
+.hero-divider{width:70px;height:2px;background:linear-gradient(90deg,var(--green),transparent);margin:18px 0 22px;}
+.hero-text{color:#7ABFA0;font-size:17px;line-height:1.85;margin-bottom:34px;max-width:510px;}
+.hero-buttons{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green-dark));color:var(--deep);padding:13px 30px;border-radius:4px;text-decoration:none;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;transition:0.3s;box-shadow:0 4px 20px rgba(46,204,113,0.25);font-family:var(--mono);border:none;cursor:pointer;}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(46,204,113,0.4);}
+.btn-outline-green{border:1px solid var(--green);color:var(--green);padding:13px 30px;border-radius:4px;text-decoration:none;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;transition:0.3s;font-family:var(--mono);background:none;cursor:pointer;}
+.btn-outline-green:hover{background:rgba(46,204,113,0.08);}
+
+.hero-card{background:rgba(46,204,113,0.04);border:1px solid rgba(46,204,113,0.18);border-radius:12px;padding:32px;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
+.hero-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--emerald));}
+.hero-card-title{font-family:var(--mono);color:var(--green);font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:18px;}
+.hero-stat{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid rgba(46,204,113,0.08);}
+.hero-stat:last-child{border-bottom:none;}
+.stat-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.stat-dot.em{background:var(--emerald);}
+.stat-label{color:#7ABFA0;font-size:14px;flex:1;}
+.stat-val{color:var(--green);font-weight:700;font-size:16px;font-family:var(--serif);letter-spacing:1px;}
+
+/* ============================================================
+   MARKET STRIP
+============================================================ */
+.market-strip{background:var(--green-dark);padding:50px 7%;}
+.stats-grid{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:40px;}
+.stat-item{text-align:center;}
+.stat-num{font-family:var(--serif);font-size:40px;color:var(--white);font-weight:700;display:block;margin-bottom:8px;}
+.stat-desc{color:rgba(255,255,255,0.75);font-size:13px;line-height:1.65;}
+
+/* ============================================================
+   ABOUT
+============================================================ */
+.about-section{padding:120px 7%;background:var(--deep-mid);position:relative;overflow:hidden;}
+.about-section::before{content:"";position:absolute;top:0;right:0;width:240px;height:240px;background:var(--emerald);opacity:0.05;clip-path:polygon(100% 0,0 0,100% 100%);}
+.about-container{max-width:1100px;margin:auto;display:grid;grid-template-columns:1.3fr 1fr;gap:80px;align-items:center;position:relative;z-index:2;}
+.about-left p{color:#7ABFA0;line-height:1.85;margin-bottom:20px;font-size:16px;max-width:520px;}
+.about-features{margin-top:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.feature-tag{background:rgba(46,204,113,0.06);border:1px solid rgba(46,204,113,0.18);color:rgba(46,204,113,0.9);padding:10px 16px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:0.5px;font-family:var(--mono);}
+.founder-box{background:rgba(46,204,113,0.04);border:1px solid rgba(46,204,113,0.18);padding:36px;border-radius:12px;position:relative;}
+.founder-box::before{content:'"';position:absolute;top:-20px;left:28px;font-size:80px;color:var(--green);opacity:0.12;font-family:var(--serif);line-height:1;}
+.founder-box::after{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);border-radius:12px 12px 0 0;}
+.founder-img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid rgba(46,204,113,0.4);margin-bottom:16px;display:block;}
+.founder-box-title{font-family:var(--mono);color:var(--green);font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}
+.founder-box-div{width:50px;height:2px;background:var(--green);margin-bottom:16px;}
+.founder-box p{color:#7ABFA0;line-height:1.8;margin-bottom:14px;font-size:15px;}
+.founder-box p strong{color:rgba(46,204,113,0.9);}
+.contact-btn{display:inline-block;padding:10px 22px;background:var(--green);color:var(--deep);text-decoration:none;border-radius:4px;font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-top:4px;transition:0.3s;font-family:var(--mono);}
+.contact-btn:hover{background:#3DE882;}
+
+/* ============================================================
+   HOW IT WORKS
+============================================================ */
+.process-section{padding:120px 7%;background:var(--off-white);position:relative;overflow:hidden;}
+.process-section::before{content:"";position:absolute;top:0;right:0;width:240px;height:240px;background:var(--green);opacity:0.07;clip-path:polygon(100% 0,0 0,100% 100%);}
+.process-container{max-width:1200px;margin:auto;text-align:center;position:relative;z-index:2;}
+.process-container .section-title{color:var(--text-dark);}
+.process-container .section-label{color:var(--emerald-dark);}
+.process-container .section-divider{margin:14px auto 26px;}
+.process-sub{max-width:660px;margin:0 auto 55px;color:#3A6B4A;line-height:1.8;font-size:16px;}
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;}
+.process-card{background:var(--white);padding:26px 20px;border-radius:10px;border:1px solid #C5E8D4;border-top:4px solid var(--green);text-align:left;transition:0.35s;box-shadow:0 4px 20px rgba(0,0,0,0.04);}
+.process-card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(46,204,113,0.12);}
+.process-card-img{width:100%;height:135px;object-fit:cover;border-radius:7px;margin-bottom:14px;display:block;background:var(--deep);}
+.step-badge{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--emerald-dark);letter-spacing:2px;margin-bottom:8px;}
+.process-card h3{font-family:var(--serif);color:var(--text-dark);font-size:18px;margin-bottom:10px;}
+.process-card p{color:var(--text-muted);font-size:14px;line-height:1.7;}
+
+/* ============================================================
+   SERVICES / PLATFORM
+============================================================ */
+.platform-section{padding:120px 7%;background:var(--deep);}
+.platform-container{max-width:1200px;margin:auto;}
+.platform-sub{max-width:680px;color:#7ABFA0;line-height:1.8;font-size:16px;margin-bottom:55px;}
+.platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+.platform-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;overflow:hidden;transition:0.35s;position:relative;}
+.platform-card:hover{border-color:rgba(46,204,113,0.4);transform:translateY(-5px);}
+.platform-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);}
+.platform-card-img{width:100%;height:160px;object-fit:cover;display:block;background:var(--deep-mid);}
+.platform-card .inner{padding:24px;}
+.element-badge{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:3px;background:rgba(46,204,113,0.1);color:var(--green);margin-bottom:10px;border:1px solid rgba(46,204,113,0.2);}
+.platform-card h3{font-family:var(--serif);color:var(--white);font-size:19px;margin-bottom:10px;}
+.platform-card p{color:#7ABFA0;font-size:14px;line-height:1.7;}
+.platform-card .more-text{display:none;margin-top:10px;color:#7ABFA0;font-size:14px;line-height:1.7;}
+.platform-card.open .more-text{display:block;}
+.learn-btn{margin-top:14px;background:none;border:1px solid rgba(46,204,113,0.3);color:var(--green);padding:8px 18px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:700;letter-spacing:1px;font-family:var(--mono);transition:0.3s;text-transform:uppercase;}
+.learn-btn:hover{background:rgba(46,204,113,0.08);}
+
+/* ============================================================
+   MARKET DATA  GRAPHS PAGE
+============================================================ */
+.market-section{padding:120px 7%;background:var(--deep-mid);}
+.market-container{max-width:1200px;margin:auto;}
+.market-intro{max-width:680px;color:#7ABFA0;font-size:16px;line-height:1.8;margin-bottom:60px;}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:36px;}
+.chart-card{background:rgba(46,204,113,0.03);border:1px solid rgba(46,204,113,0.15);border-radius:12px;padding:28px;position:relative;overflow:hidden;}
+.chart-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);}
+.chart-title{font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.chart-subtitle{color:#7ABFA0;font-size:13px;margin-bottom:20px;}
+.chart-wrap{position:relative;height:230px;}
+.chart-card-full{background:rgba(46,204,113,0.03);border:1px solid rgba(46,204,113,0.15);border-radius:12px;padding:28px;position:relative;overflow:hidden;margin-bottom:36px;}
+.chart-card-full::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--emerald),transparent);}
+.chart-wrap-full{position:relative;height:260px;}
+
+/* Competitor radar */
+.radar-wrap{position:relative;height:280px;}
+
+/* KPIs row */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:36px;}
+.kpi-card{background:rgba(46,204,113,0.04);border:1px solid rgba(46,204,113,0.15);border-radius:10px;padding:22px;text-align:center;}
+.kpi-val{font-family:var(--serif);font-size:36px;color:var(--green);display:block;margin-bottom:4px;}
+.kpi-label{color:#7ABFA0;font-size:12px;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;}
+
+/* ============================================================
+   FINANCIAL SECTION
+============================================================ */
+.financial-section{padding:120px 7%;background:var(--deep);}
+.financial-container{max-width:1200px;margin:auto;}
+.fin-intro{max-width:680px;color:#7ABFA0;font-size:16px;line-height:1.8;margin-bottom:55px;}
+.fin-charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:30px;}
+.fin-kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:36px;}
+.fin-kpi{background:rgba(46,204,113,0.04);border:1px solid rgba(46,204,113,0.15);border-radius:10px;padding:24px;}
+.fin-kpi .fk-label{font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.fin-kpi .fk-val{font-family:var(--serif);font-size:32px;color:var(--white);margin-bottom:4px;}
+.fin-kpi .fk-sub{color:#7ABFA0;font-size:13px;}
+.sensitivity-table{width:100%;border-collapse:collapse;font-size:14px;}
+.sensitivity-table th{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green);padding:12px 16px;text-align:left;border-bottom:2px solid rgba(46,204,113,0.2);}
+.sensitivity-table td{padding:12px 16px;color:#7ABFA0;border-bottom:1px solid rgba(46,204,113,0.07);}
+.sensitivity-table tr:last-child td{border-bottom:none;}
+.sensitivity-table tr.base td{color:var(--white);}
+.pill-green{display:inline-block;background:rgba(46,204,113,0.15);color:var(--green);padding:2px 8px;border-radius:3px;font-family:var(--mono);font-size:11px;}
+
+/* ============================================================
+   PRICING
+============================================================ */
+.pricing-section{padding:120px 7%;background:var(--deep-mid);}
+.pricing-container{max-width:1100px;margin:auto;}
+.pricing-sub{max-width:620px;color:#7ABFA0;font-size:16px;line-height:1.8;margin-bottom:55px;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+.price-card{background:rgba(46,204,113,0.03);border:1px solid rgba(46,204,113,0.15);border-radius:12px;padding:36px;position:relative;transition:0.35s;}
+.price-card:hover{border-color:rgba(46,204,113,0.35);transform:translateY(-5px);}
+.price-card.featured{border-color:rgba(46,204,113,0.5);background:rgba(46,204,113,0.07);}
+.price-card.featured::before{content:"MOST POPULAR";position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--green);color:var(--deep);font-size:10px;font-weight:700;letter-spacing:2px;padding:4px 14px;border-radius:3px;font-family:var(--mono);}
+.price-tag{font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;}
+.price-card h3{font-family:var(--serif);font-size:22px;color:var(--white);margin-bottom:12px;}
+.price-card>p{color:#7ABFA0;font-size:14px;line-height:1.7;margin-bottom:20px;}
+.price-amount{font-family:var(--serif);font-size:36px;color:var(--green);display:block;margin-bottom:4px;}
+.price-unit{color:#7ABFA0;font-size:12px;margin-bottom:24px;font-family:var(--mono);}
+.price-features{list-style:none;margin-bottom:28px;}
+.price-features li{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(46,204,113,0.06);color:#7ABFA0;font-size:14px;line-height:1.5;}
+.price-features li:last-child{border-bottom:none;}
+.check{color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px;}
+.price-btn{display:block;text-align:center;padding:13px;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:0.3s;font-family:var(--mono);cursor:pointer;border:none;}
+.price-btn-green{background:var(--green);color:var(--deep);}
+.price-btn-green:hover{background:#3DE882;}
+.price-btn-outline{border:1px solid rgba(46,204,113,0.4) !important;color:var(--green);background:none;}
+.price-btn-outline:hover{background:rgba(46,204,113,0.08);}
+
+/* ============================================================
+   FAQ
+============================================================ */
+.faq-section{padding:120px 7%;background:var(--deep);}
+.faq-container{max-width:900px;margin:auto;}
+.faq-header{text-align:center;margin-bottom:55px;}
+.faq-header .section-divider{margin:14px auto 0;}
+.faq-item{border-bottom:1px solid rgba(46,204,113,0.1);}
+.faq-question{display:flex;justify-content:space-between;align-items:center;padding:22px 0;cursor:pointer;}
+.faq-question h4{font-family:var(--serif);font-size:18px;color:var(--white);flex:1;padding-right:20px;}
+.faq-icon{color:var(--green);font-size:22px;font-weight:300;transition:0.3s;flex-shrink:0;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-answer{display:none;padding-bottom:22px;color:#7ABFA0;line-height:1.8;font-size:15px;}
+.faq-item.open .faq-answer{display:block;}
+
+/* ============================================================
+   CONTACT
+============================================================ */
+.contact-section{padding:120px 7%;background:var(--deep-mid);}
+.contact-container{max-width:1100px;margin:auto;display:grid;grid-template-columns:1fr 1.3fr;gap:80px;align-items:start;}
+.contact-left p{color:#7ABFA0;font-size:16px;line-height:1.8;margin-bottom:28px;}
+.contact-left .section-divider{margin:14px 0 28px;}
+.contact-info-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;}
+.contact-icon{width:40px;height:40px;border-radius:8px;background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);display:flex;align-items:center;justify-content:center;color:var(--green);font-size:16px;flex-shrink:0;}
+.contact-info-text strong{display:block;color:var(--white);font-size:13px;font-family:var(--mono);letter-spacing:0.5px;margin-bottom:3px;}
+.contact-info-text span{color:#7ABFA0;font-size:14px;}
+.contact-form{background:rgba(46,204,113,0.03);border:1px solid rgba(46,204,113,0.15);border-radius:12px;padding:36px;}
+.form-group{margin-bottom:20px;}
+.form-group label{display:block;color:var(--green);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;font-family:var(--mono);}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:rgba(46,204,113,0.04);border:1px solid rgba(46,204,113,0.18);border-radius:6px;padding:12px 16px;color:var(--white);font-size:14px;font-family:var(--font);transition:0.3s;outline:none;}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:rgba(46,204,113,0.5);background:rgba(46,204,113,0.07);}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(122,191,160,0.4);}
+.form-group select option{background:var(--deep-mid);color:var(--white);}
+.form-group textarea{height:120px;resize:vertical;}
+.form-submit{width:100%;background:linear-gradient(135deg,var(--green),var(--green-dark));color:var(--deep);border:none;padding:14px;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:0.3s;font-family:var(--mono);}
+.form-submit:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(46,204,113,0.35);}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+footer{background:rgba(0,0,0,0.6);border-top:1px solid rgba(46,204,113,0.1);padding:60px 7% 30px;}
+.footer-grid{max-width:1200px;margin:0 auto 50px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:50px;}
+.footer-brand p{color:#7ABFA0;font-size:14px;line-height:1.8;max-width:360px;margin-top:16px;}
+.logo-wrap{display:flex;align-items:center;gap:10px;}
+.logo-icon-sm{width:30px;height:30px;background:linear-gradient(135deg,var(--green),var(--green-dark));border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.logo-icon-sm svg{width:18px;height:18px;}
+.logo-text{font-family:var(--serif);font-size:18px;color:var(--green);font-weight:700;}
+.logo-text span{color:var(--white);font-weight:400;}
+.footer-col h4{font-family:var(--mono);color:var(--green);font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;}
+.footer-col a{display:block;color:#7ABFA0;text-decoration:none;font-size:14px;margin-bottom:10px;transition:0.3s;cursor:pointer;}
+.footer-col a:hover{color:var(--green);}
+.footer-bottom{max-width:1200px;margin:auto;border-top:1px solid rgba(46,204,113,0.08);padding-top:24px;display:flex;justify-content:space-between;align-items:center;}
+.footer-bottom p{color:rgba(122,191,160,0.5);font-size:13px;}
+.footer-bottom span{color:var(--green);}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media(max-width:1100px){
+  .charts-grid{grid-template-columns:1fr;}
+  .fin-charts-grid{grid-template-columns:1fr;}
+  .kpi-row{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:900px){
+  .nav-links,.nav-cta{display:none;}
+  .hamburger{display:flex;}
+  .hero-section{padding:120px 6% 80px;min-height:auto;}
+  .hero-container,.about-container,.contact-container{grid-template-columns:1fr;gap:50px;}
+  .hero-left h1{font-size:34px;}
+  .hero-buttons{flex-wrap:wrap;}
+  .process-grid{grid-template-columns:1fr 1fr;}
+  .platform-grid{grid-template-columns:1fr;}
+  .pricing-grid{grid-template-columns:1fr;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .footer-grid{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;gap:8px;text-align:center;}
+  .kpi-row,.fin-kpi-row{grid-template-columns:1fr 1fr;}
+  .section-title{font-size:30px;}
+}
+@media(max-width:600px){
+  .process-grid{grid-template-columns:1fr;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .kpi-row,.fin-kpi-row{grid-template-columns:1fr;}
+  .about-features{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR  index_8 style with page-nav buttons
+============================================================ -->
+<nav class="navbar">
+  <a class="nav-logo" onclick="showPage('home')">
+    GrowPod <span>&nbsp;AI</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><button onclick="showPage('home')" id="nav-home" class="active">Home</button></li>
+    <li><button onclick="showPage('about')" id="nav-about">About</button></li>
+    <li><button onclick="showPage('platform')" id="nav-platform">Platform</button></li>
+    <li><button onclick="showPage('market')" id="nav-market">Market</button></li>
+    <li><button onclick="showPage('financials')" id="nav-financials">Financials</button></li>
+    <li><button onclick="showPage('pricing')" id="nav-pricing">Pricing</button></li>
+    <li><button onclick="showPage('contact')" id="nav-contact">Contact</button></li>
+  </ul>
+
+  <div class="nav-cta">
+    <button class="btn-demo-nav" onclick="showPage('contact')">Request Demo</button>
+  </div>
+
+  <button class="hamburger" id="hamburger" aria-label="menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <button onclick="showPage('home');closeMobile()">Home</button>
+  <button onclick="showPage('about');closeMobile()">About</button>
+  <button onclick="showPage('platform');closeMobile()">Platform</button>
+  <button onclick="showPage('market');closeMobile()">Market Data</button>
+  <button onclick="showPage('financials');closeMobile()">Financials</button>
+  <button onclick="showPage('pricing');closeMobile()">Pricing</button>
+  <button onclick="showPage('contact');closeMobile()">Contact</button>
+</div>
+
+
+<!-- ============================================================
+     PAGE: HOME
+============================================================ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero-section">
+    <div class="hero-glow"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-container">
+      <div class="hero-left">
+        <div class="hero-badge">UK Agritech Innovation · Est. 2023</div>
+        <h1>GrowPod <span>AI </span></h1>
+        <div class="hero-divider"></div>
+        <p class="hero-text">
+          The UK's first fully integrated AI-powered mushroom cultivation platform  combining IoT smart containers, machine-learning grow recipes, and subscription substrate supply to deliver predictable, scalable harvests with up to 70% less labour.
+        </p>
+        <div class="hero-buttons">
+          <button class="btn-green" onclick="showPage('platform')">Explore Platform →</button>
+          <button class="btn-outline-green" onclick="showPage('contact')">Request Demo</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-card">
+          <div class="hero-card-title">Live Platform Stats</div>
+          <div class="hero-stat">
+            <div class="stat-dot"></div>
+            <div class="stat-label">Yield per GrowPod / cycle</div>
+            <div class="stat-val">500 kg</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-dot em"></div>
+            <div class="stat-label">Contamination detection accuracy</div>
+            <div class="stat-val">95%+</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-dot"></div>
+            <div class="stat-label">Labour reduction vs. traditional</div>
+            <div class="stat-val">70%</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-dot em"></div>
+            <div class="stat-label">Full ROI payback period</div>
+            <div class="stat-val">12–16 mo</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-dot"></div>
+            <div class="stat-label">Production cycle length</div>
+            <div class="stat-val">25 Days</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKET STRIP -->
+  <section class="market-strip">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-num">£2.37B</span>
+        <div class="stat-desc">UK mushroom market 2024  growing to £3.94B by 2033 at 5.81% CAGR</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">58%</span>
+        <div class="stat-desc">UK mushroom supply met via imports  a structural gap GrowPod AI directly addresses</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">£300M+</span>
+        <div class="stat-desc">Annual logistics, emissions & supply inefficiency costs from import dependency</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">700+</span>
+        <div class="stat-desc">Farmers already using GrowtheFunguy substrate systems co-developed by our founder</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="process-section">
+    <div class="process-container">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">From Deployment to Harvest in 25 Days</h2>
+      <div class="section-divider"></div>
+      <p class="process-sub">Every GrowPod AI deployment follows a proven four-stage journey  from plug-and-play installation and AI-guided setup, to automated growing cycles, real-time monitoring, and scalable commercial harvest with subscription substrate delivery.</p>
+      <div class="process-grid">
+        <div class="process-card">
+          <img src="grow1.png" class="process-card-img" alt="Deploy">
+          <div class="step-badge">STEP 01</div>
+          <h3>Deploy Your GrowPod</h3>
+          <p>Your fully assembled GrowPod container unit arrives ready to operate  featuring IoT climate control, blue-spectrum LED lighting, CCTV monitoring, and automated ventilation. No construction needed.</p>
+        </div>
+        <div class="process-card">
+          <img src="grow2.png" class="process-card-img" alt="Substrate">
+          <div class="step-badge">STEP 02</div>
+          <h3>Substrate & LabPot Setup</h3>
+          <p>Pre-sterilised MasterMix or MushPellet substrate is delivered on a 25-day subscription cycle. The LabPot micro-lab handles inoculation, incubation, and contamination control  guided by AI at every stage.</p>
+        </div>
+        <div class="process-card">
+          <img src="grow3.png" class="process-card-img" alt="AI">
+          <div class="step-badge">STEP 03</div>
+          <h3>AI-Guided Growing Cycle</h3>
+          <p>GrowPod Cloud SaaS monitors temperature, humidity, CO₂, and airflow in real time  automatically adjusting grow recipes, detecting early contamination, and benchmarking performance across the fleet.</p>
+        </div>
+        <div class="process-card">
+          <img src="grow4.png" class="process-card-img" alt="Harvest">
+          <div class="step-badge">STEP 04</div>
+          <h3>Consistent Harvest & Scale</h3>
+          <p>Each GrowPod delivers up to 500 kg of oyster mushrooms or 250 kg of lion's mane per cycle. Harvest-to-shelf times under 24 hours enable premium local supply, and modular scaling requires no new infrastructure.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+
+<!-- ============================================================
+     PAGE: ABOUT
+============================================================ -->
+<div class="page" id="page-about">
+  <section class="about-section" style="min-height:100vh;">
+    <div class="about-container">
+      <div class="about-left">
+        <div class="section-label">About GrowPod AI </div>
+        <h2 class="section-title">UK's Leading Integrated Mushroom Cultivation Platform</h2>
+        <div class="section-divider"></div>
+        <p>GrowPod AI  is an agritech startup advancing sustainable mushroom cultivation through a fully integrated technology ecosystem. The company develops modular, automated cultivation infrastructure designed for commercial growers, urban farms, and controlled-environment agriculture operators across the United Kingdom.</p>
+        <p>Our flagship innovation, the GrowPod, is a fully automated, plug-and-play container farming unit engineered for high-value gourmet and functional mushrooms such as oyster, shiitake, and lion's mane. Each unit integrates IoT-enabled climate control, automated ventilation, humidity regulation, blue-spectrum LED lighting, and remote monitoring  enabling consistent, high-yield production independent of external climate conditions.</p>
+        <p>Complementing the GrowPod units, LabPods are modular mobile micro-laboratory containers for sterilisation, incubation, and substrate preparation  removing the need for permanent laboratory infrastructure while integrating directly with GrowPods to form a complete, self-contained production ecosystem.</p>
+        <div class="about-features">
+          <div class="feature-tag">IoT Monitoring</div>
+          <div class="feature-tag">AI Grow Recipes</div>
+          <div class="feature-tag">Contamination Prediction</div>
+          <div class="feature-tag">Yield Forecasting</div>
+          <div class="feature-tag">Substrate Subscription</div>
+          <div class="feature-tag">FSA Compliant Platform</div>
+        </div>
+      </div>
+      <div class="founder-box">
+        <div class="founder-box-title">Founder &amp; Director</div>
+        <div class="founder-box-div"></div>
+        <p><strong>Ameen Abdulsalam</strong> is an agritech entrepreneur based in Glasgow with a multidisciplinary background spanning sustainable agriculture, business strategy, and international trade.</p>
+        <p>Holding an <strong>MBA in Finance, Marketing &amp; Sales</strong> from Wrexham Glyndŵr University and a B.Com in Computer Applications, he is the Founder Director of Scott Fungi Ltd and a long-term partner of GrowtheFunguy since 2020  bringing deep expertise in IoT farming, substrate innovation, and UK market entry.</p>
+        <p>His work has directly contributed to substrate systems now used by <strong>700+ farmers in India</strong>, and he is currently leading GrowPod AI's UK commercial rollout with an established India-UK supply chain and early pilot deployments.</p>
+        <a onclick="showPage('contact')" class="contact-btn" style="cursor:pointer;">Contact Ameen →</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ============================================================
+     PAGE: PLATFORM
+============================================================ -->
+<div class="page" id="page-platform">
+  <section class="platform-section" style="min-height:100vh;">
+    <div class="platform-container">
+      <div class="section-label">Our Solutions</div>
+      <h2 class="section-title">Six Integrated Platform Components</h2>
+      <div class="section-divider"></div>
+      <p class="platform-sub">GrowPod AI delivers a fully vertically integrated ecosystem  hardware, software, AI intelligence, and consumables  designed to eliminate fragmented farming and make commercial mushroom production predictable, scalable, and profitable.</p>
+      <div class="platform-grid">
+        <div class="platform-card" id="card-a">
+          <img src="grow5.png" class="platform-card-img" alt="GrowPod">
+          <div class="inner">
+            <div class="element-badge">Hardware</div>
+            <h3>GrowPod Units</h3>
+            <p class="short-text">Fully automated plug-and-play container farms engineered exclusively for high-yield mushroom cultivation.</p>
+            <p class="more-text">Each GrowPod is built from a refurbished shipping container and integrates IoT-enabled climate control, automated ventilation, humidity regulation, blue-spectrum LED lighting, and CCTV monitoring. Delivered fully assembled and ready to operate, a single unit produces up to 500 kg of oyster mushrooms or 250 kg of lion's mane per 25-day production cycle.</p>
+            <button class="learn-btn" onclick="toggleCard('card-a',this)">Learn More</button>
+          </div>
+        </div>
+        <div class="platform-card" id="card-b">
+          <img src="grow6.png" class="platform-card-img" alt="LabPod">
+          <div class="inner">
+            <div class="element-badge">Hardware</div>
+            <h3>LabPod Micro-Lab Units</h3>
+            <p class="short-text">Modular container labs for sterilisation, inoculation, and substrate preparation  eliminating fixed lab infrastructure.</p>
+            <p class="more-text">LabPods provide laminar airflow chambers, autoclave and sterilisation equipment, substrate preparation areas, incubation storage, and dry storage for grains and cultures. A single LabPot can support multiple GrowPod units for fully modular, scalable operations.</p>
+            <button class="learn-btn" onclick="toggleCard('card-b',this)">Learn More</button>
+          </div>
+        </div>
+        <div class="platform-card" id="card-c">
+          <img src="grow7.png" class="platform-card-img" alt="SaaS">
+          <div class="inner">
+            <div class="element-badge">Software</div>
+            <h3>GrowPod Cloud SaaS</h3>
+            <p class="short-text">Real-time AI-driven SaaS platform delivering live monitoring, grow optimisation, and contamination alerts.</p>
+            <p class="more-text">GrowPod Cloud integrates IoT sensor data with AI models trained on mushroom biology. Key modules: Live IoT Dashboard, AI Grow Optimiser (automated recipe adjustment), 25-Day Cycle Manager, LabPot Remote QC, Yield Forecaster (±10% accuracy), ROI Analytics, and automated FSA compliance reporting. £1,000/month per pod.</p>
+            <button class="learn-btn" onclick="toggleCard('card-c',this)">Learn More</button>
+          </div>
+        </div>
+        <div class="platform-card" id="card-d">
+          <img src="grow8.png" class="platform-card-img" alt="Substrate">
+          <div class="inner">
+            <div class="element-badge">Consumables</div>
+            <h3>Substrate Subscription</h3>
+            <p class="short-text">Premium monthly substrate supply aligned to 25-day production cycles  MasterMix and MushPellets delivered to your pod.</p>
+            <p class="more-text">Recurring supply of MushPellets (general-purpose) and MasterMix (advanced, for wood-loving species) pre-sterilised and serialised for traceability. Aligned to 25-day scheduling via the GrowPod Cloud Subscription Hub. Pricing averages £400–600 per cycle.</p>
+            <button class="learn-btn" onclick="toggleCard('card-d',this)">Learn More</button>
+          </div>
+        </div>
+        <div class="platform-card" id="card-e">
+          <img src="grow9.png" class="platform-card-img" alt="AI">
+          <div class="inner">
+            <div class="element-badge">AI Intelligence</div>
+            <h3>AI Contamination &amp; Yield AI</h3>
+            <p class="short-text">Predictive ML models detect mould and phorid infestations up to 48 hours early  preventing costly losses.</p>
+            <p class="more-text">CNN and ML classifiers trained on sensor and CCTV data detect early contamination signals, triggering automatic HVAC interventions. LSTM models forecast harvest weight to ±10%. Fleet reinforcement learning continuously refines grow recipes, delivering compounding 10–15% yield gains across the network.</p>
+            <button class="learn-btn" onclick="toggleCard('card-e',this)">Learn More</button>
+          </div>
+        </div>
+        <div class="platform-card" id="card-f">
+          <img src="grow10.png" class="platform-card-img" alt="Supplements">
+          <div class="inner">
+            <div class="element-badge">Consumer</div>
+            <h3>Wellness Supplement Range</h3>
+            <p class="short-text">Mushroom-derived health supplements  Lion's Mane, Reishi, Cordyceps, and Turkey Tail  via UK e-commerce.</p>
+            <p class="more-text">A direct-to-consumer supplement line leveraging circular production outputs. Products include Lion's Mane cognitive supplements, Reishi immune support, Cordyceps energy formulas, and Turkey Tail wellness capsules  all sourced from verified UK and India production partners.</p>
+            <button class="learn-btn" onclick="toggleCard('card-f',this)">Learn More</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ============================================================
+     PAGE: MARKET DATA (with graphs)
+============================================================ -->
+<div class="page" id="page-market">
+  <section class="market-section" style="min-height:100vh;">
+    <div class="market-container">
+      <div class="section-label">Market Intelligence</div>
+      <h2 class="section-title">UK Market Opportunity &amp; Competitive Landscape</h2>
+      <div class="section-divider"></div>
+      <p class="market-intro">GrowPod AI operates at the intersection of two rapidly expanding UK sectors  vertical farming and functional mushrooms  both underpinned by strong structural demand, import dependency, and growing sustainability investment. The data below reflects deep research from IMARC Group, MobilityForesights, and UK Food Systems.</p>
+
+      <!-- KPIs -->
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <span class="kpi-val">£2.37B</span>
+          <div class="kpi-label">UK Mushroom Market 2024</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-val">15.8%</span>
+          <div class="kpi-label">Container Farming CAGR 2026–33</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-val">58%</span>
+          <div class="kpi-label">UK Mushrooms from Imports</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-val">£4.5B</span>
+          <div class="kpi-label">Container Farming Forecast 2033</div>
+        </div>
+      </div>
+
+      <!-- CHARTS ROW 1 -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title">UK Mushroom Market Size</div>
+          <div class="chart-subtitle">USD Million · 2024–2033 · CAGR 5.81%</div>
+          <div class="chart-wrap"><canvas id="chartMushroom"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Container Farming Market</div>
+          <div class="chart-subtitle">USD Billion · UK · CAGR 15.8%</div>
+          <div class="chart-wrap"><canvas id="chartContainer"></canvas></div>
+        </div>
+      </div>
+
+      <!-- CHARTS ROW 2 -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title">UK Mushroom Supply vs. Demand</div>
+          <div class="chart-subtitle">Annual production vs import dependency (Tonnes '000)</div>
+          <div class="chart-wrap"><canvas id="chartSupply"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Competitive Positioning</div>
+          <div class="chart-subtitle">GrowPod AI vs. Competitors  Feature Depth Score (1–5)</div>
+          <div class="radar-wrap"><canvas id="chartRadar"></canvas></div>
+        </div>
+      </div>
+
+      <!-- FULL WIDTH: Vertical Farming Equipment -->
+      <div class="chart-card-full">
+        <div class="chart-title">UK Vertical Farming Equipment Market</div>
+        <div class="chart-subtitle">USD Billion · 2025–2031 · CAGR 15.3% (Source: MobilityForesights)</div>
+        <div class="chart-wrap-full"><canvas id="chartVFE"></canvas></div>
+      </div>
+
+      <!-- FULL WIDTH: GrowPod yield vs traditional -->
+      <div class="chart-card-full">
+        <div class="chart-title">GrowPod AI vs. Traditional Farm  Yield &amp; Cost Performance</div>
+        <div class="chart-subtitle">Indexed comparison across 6 key operational metrics</div>
+        <div class="chart-wrap-full"><canvas id="chartPerf"></canvas></div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+
+<!-- ============================================================
+     PAGE: FINANCIALS (with graphs)
+============================================================ -->
+<div class="page" id="page-financials">
+  <section class="financial-section" style="min-height:100vh;">
+    <div class="financial-container">
+      <div class="section-label">Financial Projections</div>
+      <h2 class="section-title">3-Year Revenue Model &amp; Financial Analysis</h2>
+      <div class="section-divider"></div>
+      <p class="fin-intro">GrowPod AI adopts a hybrid monetisation strategy combining upfront hardware sales with high-margin recurring SaaS subscription and substrate supply revenue. The model targets £464K revenue by Year 2, scaling to £886K by Year 3, with projected gross margins of 71%+ and positive net profit from Year 1.</p>
+
+      <!-- KPI Cards -->
+      <div class="fin-kpi-row">
+        <div class="fin-kpi">
+          <div class="fk-label">Year 1 Revenue</div>
+          <div class="fk-val">£111K</div>
+          <div class="fk-sub">3 GrowPods + 1 LabPod + SaaS + consumables</div>
+        </div>
+        <div class="fin-kpi">
+          <div class="fk-label">Year 2 Revenue</div>
+          <div class="fk-val">£464K</div>
+          <div class="fk-sub">11 GrowPods, 4 LabPods, £139K SaaS ARR</div>
+        </div>
+        <div class="fin-kpi">
+          <div class="fk-label">Year 3 Revenue</div>
+          <div class="fk-val">£886K</div>
+          <div class="fk-sub">20 GrowPods, £370K SaaS ARR · 13% net margin</div>
+        </div>
+      </div>
+
+      <!-- Revenue breakdown + Gross Margin -->
+      <div class="fin-charts-grid">
+        <div class="chart-card">
+          <div class="chart-title">Revenue by Stream</div>
+          <div class="chart-subtitle">£ · Year 1 vs Year 2 vs Year 3 stacked</div>
+          <div class="chart-wrap"><canvas id="chartRevStream"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Gross Margin vs. Net Profit</div>
+          <div class="chart-subtitle">£ Gross Profit & Net Profit by Year</div>
+          <div class="chart-wrap"><canvas id="chartMargin"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Cash Flow full width -->
+      <div class="chart-card-full">
+        <div class="chart-title">Monthly Cash Flow  Year 1</div>
+        <div class="chart-subtitle">£ Net cash flow per month, with cumulative closing balance</div>
+        <div class="chart-wrap-full"><canvas id="chartCashflow"></canvas></div>
+      </div>
+
+      <!-- Sensitivity analysis -->
+      <div class="chart-card-full">
+        <div class="chart-title">Sensitivity Analysis  Year 2 Downside Scenarios</div>
+        <div class="chart-subtitle">Net profit resilience under 4 stress scenarios</div>
+        <div class="chart-wrap-full" style="height:200px;"><canvas id="chartSensitivity"></canvas></div>
+      </div>
+
+      <!-- Sensitivity Table -->
+      <div class="chart-card-full" style="margin-top:0;">
+        <div class="chart-title" style="margin-bottom:16px;">Sensitivity Summary Table</div>
+        <table class="sensitivity-table">
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Revenue (£)</th>
+              <th>Net Profit (£)</th>
+              <th>Net Margin</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="base">
+              <td>Base Case</td>
+              <td>464,150</td>
+              <td>35,970</td>
+              <td>7.75%</td>
+              <td><span class="pill-green">✓ Base</span></td>
+            </tr>
+            <tr>
+              <td>Slower Hardware Adoption (−15%)</td>
+              <td>394,000</td>
+              <td>17,500</td>
+              <td>4.4%</td>
+              <td><span class="pill-green">✓ Profitable</span></td>
+            </tr>
+            <tr>
+              <td>Lower Subscription Uptake (−20%)</td>
+              <td>436,000</td>
+              <td>22,000</td>
+              <td>5.0%</td>
+              <td><span class="pill-green">✓ Profitable</span></td>
+            </tr>
+            <tr>
+              <td>Higher Cost of Sales (+5 pts)</td>
+              <td>464,150</td>
+              <td>14,000</td>
+              <td>3.0%</td>
+              <td><span class="pill-green">✓ Profitable</span></td>
+            </tr>
+            <tr>
+              <td>Higher Payroll & OPEX (+10%)</td>
+              <td>464,150</td>
+              <td>19,000</td>
+              <td>4.1%</td>
+              <td><span class="pill-green">✓ Profitable</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+
+<!-- ============================================================
+     PAGE: PRICING
+============================================================ -->
+<div class="page" id="page-pricing">
+  <section class="pricing-section" style="min-height:100vh;">
+    <div class="pricing-container">
+      <div class="section-label">Revenue Packages</div>
+      <h2 class="section-title">Scalable Plans for Every Grower &amp; Operator</h2>
+      <div class="section-divider"></div>
+      <p class="pricing-sub">Whether you are an independent mushroom grower exploring your first GrowPod or a multi-site commercial operator managing a fleet  GrowPod AI has a package aligned to your scale, budget, and production ambitions.</p>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-tag">Starter Package</div>
+          <h3>Independent Growers</h3>
+          <p>Perfect for independent mushroom farmers and urban farming ventures starting their first containerised cultivation operation.</p>
+          <span class="price-amount">£15,000</span>
+          <div class="price-unit">per GrowPod unit · one-time hardware</div>
+          <ul class="price-features">
+            <li><span class="check">✓</span> 1 × GrowPod plug-and-play unit</li>
+            <li><span class="check">✓</span> GrowPod Cloud SaaS (£1,000/mo)</li>
+            <li><span class="check">✓</span> 3-month free SaaS onboarding access</li>
+            <li><span class="check">✓</span> Substrate subscription from £400/cycle</li>
+            <li><span class="check">✓</span> AI grow recipe library access</li>
+            <li><span class="check">✓</span> Installation &amp; operator training</li>
+          </ul>
+          <button onclick="showPage('contact')" class="price-btn price-btn-outline">Get Started →</button>
+        </div>
+        <div class="price-card featured">
+          <div class="price-tag">Professional Package</div>
+          <h3>Commercial Operators</h3>
+          <p>For hospitality groups, wholesalers, and agritech ventures deploying 3–10 GrowPods with full SaaS and substrate integration.</p>
+          <span class="price-amount">£1,000</span>
+          <div class="price-unit">per pod/month SaaS · hardware from £15k</div>
+          <ul class="price-features">
+            <li><span class="check">✓</span> Everything in Starter, plus:</li>
+            <li><span class="check">✓</span> Multi-pod fleet dashboard</li>
+            <li><span class="check">✓</span> AI contamination alerts (48hr lead)</li>
+            <li><span class="check">✓</span> Yield forecasting (±10% accuracy)</li>
+            <li><span class="check">✓</span> Automated FSA compliance reporting</li>
+            <li><span class="check">✓</span> Substrate auto-scheduling &amp; B2B matching</li>
+            <li><span class="check">✓</span> ROI analytics &amp; payback reporting</li>
+          </ul>
+          <button onclick="showPage('contact')" class="price-btn price-btn-green">Request Demo →</button>
+        </div>
+        <div class="price-card">
+          <div class="price-tag">Enterprise Package</div>
+          <h3>Fleet &amp; Multi-Site</h3>
+          <p>For food distributors, retailers, and hospitality groups deploying 10+ pods across urban or multi-site operations nationwide.</p>
+          <span class="price-amount">Custom</span>
+          <div class="price-unit">bespoke pricing · multi-site SLA</div>
+          <ul class="price-features">
+            <li><span class="check">✓</span> Everything in Professional, plus:</li>
+            <li><span class="check">✓</span> Enterprise fleet management API</li>
+            <li><span class="check">✓</span> ERP &amp; supply chain integrations</li>
+            <li><span class="check">✓</span> Predictive maintenance modules</li>
+            <li><span class="check">✓</span> Dedicated account management</li>
+            <li><span class="check">✓</span> Custom AI strain models</li>
+          </ul>
+          <button onclick="showPage('contact')" class="price-btn price-btn-outline">Enquire Now →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="faq-container">
+      <div class="faq-header">
+        <div class="section-label">FAQ</div>
+        <h2 class="section-title">Common Questions</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>What mushroom species can GrowPod units produce?</h4><span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">GrowPod units are engineered specifically for gourmet and functional mushroom cultivation. Supported species include oyster mushrooms (up to 500 kg per 25-day cycle), lion's mane (up to 250 kg per cycle), shiitake, and other wood-loving varieties. The AI grow recipe library contains species-specific environmental parameters covering colonisation, pinning, and fruiting phases. Future roadmap includes reishi and genomic-informed grow recipes.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>How does the AI contamination detection system work?</h4><span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">The contamination predictor uses CNN image classifiers trained on CCTV feeds and ML models analysing IoT sensor anomalies (humidity spikes, CO₂ deviations, temperature irregularities) that correlate with early-stage mould or phorid fly infestations. The system provides up to 48 hours' advance warning, enabling automated HVAC interventions. Detection accuracy has reached 95%+, compared with 20–30% yield losses on manually managed farms.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>Do I need prior mushroom farming experience?</h4><span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">No specialist expertise is required. The AI system manages 80% of operational decisions automatically  adjusting temperature, humidity, CO₂, and airflow in real time. The GrowPod Cloud dashboard provides clear guidance for each stage, and the LabPot remote QC system guides inoculation workflows step by step. A typical GrowPod requires just one operator spending approximately 4 hours per day. Full onboarding training is included with every deployment.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>What is the expected ROI for a single GrowPod unit?</h4><span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">A single GrowPod producing 500 kg of oyster mushrooms per month generates approximately £2,500/month at £5/kg wholesale  £30,000 annually. After operating costs of ~£10,000/year, operators achieve net revenue of ~£20,000/unit/year. At a hardware price of £15,000–£35,000, this delivers a full ROI payback period of 12–16 months. GrowPod-grown product also undercuts imported mushrooms (£7–10/kg landed) by ~30%.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ============================================================
+     PAGE: CONTACT
+============================================================ -->
+<div class="page" id="page-contact">
+  <section class="contact-section" style="min-height:100vh;">
+    <div class="contact-container">
+      <div class="contact-left">
+        <div class="section-label">Get In Touch</div>
+        <h2 class="section-title">Request a Demo or Discuss Your Operation</h2>
+        <div class="section-divider"></div>
+        <p>Whether you are an independent grower, urban farm operator, hospitality buyer, or agritech investor  we would love to hear from you and explore how GrowPod AI can transform your mushroom production.</p>
+        <div class="contact-info-item">
+          <div class="contact-icon">✉</div>
+          <div class="contact-info-text"><strong>Email</strong><span>ameensalam8@gmail.com</span></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">☎</div>
+          <div class="contact-info-text"><strong>Phone</strong><span>+44 7868 645683</span></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">⚑</div>
+          <div class="contact-info-text"><strong>Headquarters</strong><span>Glasgow, United Kingdom</span></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">◈</div>
+          <div class="contact-info-text"><strong>Markets Served</strong><span>UK Nationwide · EU Expansion 2027 · North America 2028</span></div>
+        </div>
+      </div>
+      <div class="contact-right">
+        <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+          <input type="hidden" name="subject" value="New GrowPod AI Enquiry">
+          <div class="form-group"><label>Full Name</label><input type="text" name="name" placeholder="Your full name" required></div>
+          <div class="form-group"><label>Email Address</label><input type="email" name="email" placeholder="your@email.com" required></div>
+          <div class="form-group"><label>Organisation / Farm Name</label><input type="text" name="organisation" placeholder="Farm, company, or venue name" required></div>
+          <div class="form-group">
+            <label>I am interested in…</label>
+            <select name="service" required>
+              <option value="">Select your interest</option>
+              <option>GrowPod Hardware Purchase</option>
+              <option>GrowPod Cloud SaaS Demo</option>
+              <option>LabPod Micro-Lab Unit</option>
+              <option>Substrate Subscription</option>
+              <option>Enterprise / Fleet Deployment</option>
+              <option>Investor / Partnership Enquiry</option>
+              <option>Wellness Supplement Distribution</option>
+              <option>General Enquiry</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Message</label><textarea name="message" placeholder="Tell us about your growing operation, scale requirements, or questions…" required></textarea></div>
+          <button class="form-submit" type="submit">Send Enquiry →</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- FOOTER (shown on all pages) -->
+<footer id="siteFooter">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo-wrap">
+        <span class="logo-text">
+          GrowPod<span> AI</span>
+        </span>
+      </div>
+
+      <p>
+        UK's leading AI-powered smart mushroom cultivation platform delivering integrated IoT hardware, machine learning software, and subscription substrate supply to transform gourmet mushroom production into a scalable, predictable, and sustainable operation.
+      </p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a onclick="showPage('platform')">How It Works</a>
+      <a onclick="showPage('platform')">GrowPod Units</a>
+      <a onclick="showPage('platform')">GrowPod Cloud SaaS</a>
+      <a onclick="showPage('pricing')">Pricing</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a onclick="showPage('about')">About Us</a>
+      <a onclick="showPage('market')">Market Data</a>
+      <a onclick="showPage('financials')">Financials</a>
+      <a onclick="showPage('contact')">Contact</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 <span>GrowPod AI</span>. All rights reserved. UK Agritech Innovation.</p>
+    <p>Founder &amp; Director <span>Ameen Abdulsalam</span></p>
+  </div>
+</footer>
+
+
+<!-- ============================================================
+     SCRIPTS
+============================================================ -->
+<script>
+/* ---- PAGE NAV ---- */
+const pages = ['home','about','platform','market','financials','pricing','contact'];
+let chartsInitialised = {};
+
+function showPage(name) {
+  pages.forEach(p => {
+    const el = document.getElementById('page-'+p);
+    const btn = document.getElementById('nav-'+p);
+    if(el) el.classList.toggle('active', p===name);
+    if(btn) btn.classList.toggle('active', p===name);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='market' && !chartsInitialised.market){ initMarketCharts(); chartsInitialised.market=true; }
+  if(name==='financials' && !chartsInitialised.financials){ initFinancialCharts(); chartsInitialised.financials=true; }
+}
+
+/* ---- MOBILE NAV ---- */
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+hamburger.addEventListener('click', () => {
+  mobileNav.classList.toggle('open');
+});
+function closeMobile(){ mobileNav.classList.remove('open'); }
+
+/* ---- CARD TOGGLE ---- */
+function toggleCard(id, btn) {
+  const card = document.getElementById(id);
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.platform-card').forEach(c=>{
+    c.classList.remove('open');
+    const b = c.querySelector('.learn-btn');
+    if(b) b.textContent='Learn More';
+  });
+  if(!isOpen){ card.classList.add('open'); btn.textContent='Show Less'; }
+}
+
+/* ---- FAQ ---- */
+function toggleFaq(el){
+  const item = el.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+
+/* ---- CHART DEFAULTS ---- */
+const GRID = 'rgba(46,204,113,0.08)';
+const GREEN = '#2ECC71';
+const GREEN2 = '#1DB954';
+const WHITE = 'rgba(255,255,255,0.6)';
+const MUTED = 'rgba(122,191,160,0.7)';
+
+Chart.defaults.color = '#7ABFA0';
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.font.size = 11;
+
+/* ============================================================
+   MARKET CHARTS
+============================================================ */
+function initMarketCharts(){
+
+  /* 1  UK Mushroom Market */
+  new Chart(document.getElementById('chartMushroom').getContext('2d'), {
+    type:'bar',
+    data:{
+      labels:['2024','2025','2026','2027','2028','2029','2030','2031','2032','2033'],
+      datasets:[
+        {label:'Button',data:[900,950,1010,1075,1145,1220,1305,1395,1495,1600],backgroundColor:'rgba(46,204,113,0.7)',borderRadius:4},
+        {label:'Shiitake',data:[450,475,510,545,585,630,680,735,800,870],backgroundColor:'rgba(29,185,84,0.6)',borderRadius:4},
+        {label:'Oyster',data:[380,410,445,480,520,565,615,670,730,800],backgroundColor:'rgba(26,122,64,0.6)',borderRadius:4},
+        {label:'Others',data:[638,668,705,745,790,840,895,955,1020,1095],backgroundColor:'rgba(46,204,113,0.3)',borderRadius:4}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:14}}},scales:{x:{stacked:true,grid:{color:GRID}},y:{stacked:true,grid:{color:GRID},ticks:{callback:v=>v>=1000?'$'+(v/1000).toFixed(1)+'B':'$'+v+'M'}}}}
+  });
+
+  /* 2  Container Farming */
+  new Chart(document.getElementById('chartContainer').getContext('2d'), {
+    type:'line',
+    data:{
+      labels:['2024','2025','2026','2027','2028','2029','2030','2031','2032','2033'],
+      datasets:[{
+        label:'Market Size (USD Bn)',
+        data:[1.25,1.45,1.68,1.94,2.25,2.61,3.02,3.49,4.04,4.5],
+        borderColor:GREEN,borderWidth:2.5,fill:true,
+        backgroundColor:'rgba(46,204,113,0.07)',tension:0.4,
+        pointBackgroundColor:GREEN,pointRadius:4,pointHoverRadius:7
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:GRID}},y:{grid:{color:GRID},ticks:{callback:v=>'$'+v+'B'}}}}
+  });
+
+  /* 3  Supply vs Demand */
+  new Chart(document.getElementById('chartSupply').getContext('2d'), {
+    type:'bar',
+    data:{
+      labels:['2020','2021','2022','2023','2024','2025E','2026E'],
+      datasets:[
+        {label:'UK Domestic Production',data:[75,77,79,81,82,86,92],backgroundColor:'rgba(46,204,113,0.75)',borderRadius:4},
+        {label:'Imports Required',data:[90,95,100,100,103,108,115],backgroundColor:'rgba(255,90,90,0.5)',borderRadius:4},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:14}}},scales:{x:{grid:{color:GRID}},y:{grid:{color:GRID},ticks:{callback:v=>v+'k T'}}}}
+  });
+
+  /* 4  Competitive Radar */
+  new Chart(document.getElementById('chartRadar').getContext('2d'), {
+    type:'radar',
+    data:{
+      labels:['AI Depth','UK Compliance','Mushroom-Specific','IoT Integration','Substrate Supply','Scalability'],
+      datasets:[
+        {label:'GrowPod AI',data:[5,5,5,5,5,5],backgroundColor:'rgba(46,204,113,0.15)',borderColor:GREEN,borderWidth:2,pointBackgroundColor:GREEN},
+        {label:'Cropbox',data:[2,2,1,3,1,3],backgroundColor:'rgba(255,180,0,0.1)',borderColor:'rgba(255,180,0,0.6)',borderWidth:1.5,pointBackgroundColor:'rgba(255,180,0,0.6)'},
+        {label:'Traditional Farm',data:[1,1,2,1,1,2],backgroundColor:'rgba(255,80,80,0.08)',borderColor:'rgba(255,80,80,0.4)',borderWidth:1.5,pointBackgroundColor:'rgba(255,80,80,0.4)'},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:14}}},scales:{r:{backgroundColor:'rgba(46,204,113,0.02)',grid:{color:GRID},pointLabels:{color:MUTED,font:{size:11}},ticks:{display:false},min:0,max:5}}}
+  });
+
+  /* 5  VFE Full Width */
+  new Chart(document.getElementById('chartVFE').getContext('2d'), {
+    type:'bar',
+    data:{
+      labels:['2025','2026','2027','2028','2029','2030','2031'],
+      datasets:[
+        {label:'Market Size (USD Bn)',data:[3.2,3.7,4.3,5.0,5.8,6.7,7.6],backgroundColor:GREEN,borderRadius:5,barPercentage:0.55},
+        {type:'line',label:'YoY Growth %',data:[null,15.6,16.2,16.3,16.0,15.5,13.4],borderColor:'rgba(255,200,80,0.9)',borderWidth:2,yAxisID:'y2',tension:0.4,pointBackgroundColor:'rgba(255,200,80,0.9)',fill:false}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:14}}},scales:{x:{grid:{color:GRID}},y:{grid:{color:GRID},ticks:{callback:v=>'$'+v+'B'}},y2:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%'}}}}
+  });
+
+  /* 6  Performance comparison */
+  new Chart(document.getElementById('chartPerf').getContext('2d'), {
+    type:'bar',
+    data:{
+      labels:['Yield per m²','Labour Cost','Contamination Rate','Setup Time','Water Usage','ROI Speed'],
+      datasets:[
+        {label:'GrowPod AI',data:[92,30,5,20,25,88],backgroundColor:'rgba(46,204,113,0.75)',borderRadius:5,barPercentage:0.35},
+        {label:'Traditional Farm',data:[45,100,25,100,100,40],backgroundColor:'rgba(255,90,90,0.5)',borderRadius:5,barPercentage:0.35}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:14}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+' (indexed)'}}},scales:{x:{grid:{color:GRID}},y:{grid:{color:GRID},ticks:{callback:v=>v+' pts'}}}}
+  });
+}
+
+/* ============================================================
+   FINANCIAL CHARTS
+============================================================ */
+function initFinancialCharts(){
+
+  /* 1  Revenue by stream stacked */
+  new Chart(document.getElementById('chartRevStream').getContext('2d'), {
+    type:'bar',
+    data:{
+      labels:['Year 1','Year 2','Year 3'],
+      datasets:[
+        {label:'GrowPods',data:[45000,165000,300000],backgroundColor:'rgba(46,204,113,0.8)',borderRadius:4},
+        {label:'LabPods',data:[34000,136000,170000],backgroundColor:'rgba(29,185,84,0.7)',borderRadius:4},
+        {label:'SaaS Subscription',data:[24000,139000,370000],backgroundColor:'rgba(26,122,64,0.7)',borderRadius:4},
+        {label:'Consumables',data:[8100,24150,45750],backgroundColor:'rgba(46,204,113,0.35)',borderRadius:4},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:12}}},scales:{x:{stacked:true,grid:{color:GRID}},y:{stacked:true,grid:{color:GRID},ticks:{callback:v=>'£'+(v/1000).toFixed(0)+'K'}}}}
+  });
+
+  /* 2  Gross profit vs Net profit */
+  new Chart(document.getElementById('chartMargin').getContext('2d'), {
+    type:'bar',
+    data:{
+      labels:['Year 1','Year 2','Year 3'],
+      datasets:[
+        {label:'Gross Profit',data:[76590,333967,677083],backgroundColor:'rgba(46,204,113,0.65)',borderRadius:5,barPercentage:0.4},
+        {label:'Net Profit',data:[10642,35970,115020],backgroundColor:'rgba(255,200,80,0.7)',borderRadius:5,barPercentage:0.4},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:12}}},scales:{x:{grid:{color:GRID}},y:{grid:{color:GRID},ticks:{callback:v=>'£'+(v/1000).toFixed(0)+'K'}}}}
+  });
+
+  /* 3  Monthly Cash Flow Y1 */
+  const months = ['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'];
+  const monthlyCF = [43875,-1125,7164,-4052,-4052,-4052,4878,17258,-3037,6943,-2057,-5604];
+  const cumBalance = [43875,42750,49914,45863,41811,37759,42638,59896,56860,63803,61746,56142];
+
+  new Chart(document.getElementById('chartCashflow').getContext('2d'), {
+    type:'bar',
+    data:{
+      labels:months,
+      datasets:[
+        {label:'Monthly Net Cash Flow',data:monthlyCF,backgroundColor:monthlyCF.map(v=>v>=0?'rgba(46,204,113,0.7)':'rgba(255,90,90,0.55)'),borderRadius:4,barPercentage:0.5},
+        {type:'line',label:'Closing Balance',data:cumBalance,borderColor:'rgba(255,200,80,0.9)',borderWidth:2,yAxisID:'y2',tension:0.4,pointBackgroundColor:'rgba(255,200,80,0.9)',fill:false}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:12}}},scales:{x:{grid:{color:GRID}},y:{grid:{color:GRID},ticks:{callback:v=>'£'+(v/1000).toFixed(0)+'K'}},y2:{position:'right',grid:{display:false},ticks:{callback:v=>'£'+(v/1000).toFixed(0)+'K'}}}}
+  });
+
+  /* 4  Sensitivity bar */
+  new Chart(document.getElementById('chartSensitivity').getContext('2d'), {
+    type:'bar',
+    data:{
+      labels:['Base Case','Slower Hardware','Lower Subscription','Higher CoS','Higher OPEX'],
+      datasets:[{
+        label:'Year 2 Net Profit (£)',
+        data:[35970,17500,22000,14000,19000],
+        backgroundColor:['rgba(46,204,113,0.8)','rgba(255,200,80,0.6)','rgba(255,200,80,0.6)','rgba(255,160,60,0.6)','rgba(255,200,80,0.6)'],
+        borderRadius:5,barPercentage:0.55
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:GRID},ticks:{callback:v=>'£'+v.toLocaleString()}},y:{grid:{display:false}}}}
+  });
+}
+</script>
+</body>
+</html>
