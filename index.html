@@ -266,91 +266,12 @@ body{font-family:var(--font);color:var(--white);background:var(--deep);overflow-
 .fin-kpi .fk-label{font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
 .fin-kpi .fk-val{font-family:var(--serif);font-size:32px;color:var(--white);margin-bottom:4px;}
 .fin-kpi .fk-sub{color:#7ABFA0;font-size:13px;}
-/* ============================================================
-   SENSITIVITY TABLE – desktop + mobile card flip
-============================================================ */
 .sensitivity-table{width:100%;border-collapse:collapse;font-size:14px;}
-.sensitivity-table thead{position:sticky;top:0;z-index:1;}
-.sensitivity-table th{
-  font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;
-  color:var(--green);padding:13px 18px;text-align:left;
-  background:rgba(5,14,8,0.97);
-  border-bottom:2px solid rgba(46,204,113,0.25);
-  white-space:nowrap;
-}
-.sensitivity-table td{
-  padding:13px 18px;color:#7ABFA0;
-  border-bottom:1px solid rgba(46,204,113,0.08);
-  vertical-align:middle;
-  font-size:14px;
-}
+.sensitivity-table th{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green);padding:12px 16px;text-align:left;border-bottom:2px solid rgba(46,204,113,0.2);}
+.sensitivity-table td{padding:12px 16px;color:#7ABFA0;border-bottom:1px solid rgba(46,204,113,0.07);}
 .sensitivity-table tr:last-child td{border-bottom:none;}
-.sensitivity-table tr.base td{color:var(--white);font-weight:600;}
-.sensitivity-table tbody tr{transition:background 0.2s;}
-.sensitivity-table tbody tr:hover{background:rgba(46,204,113,0.04);}
-.pill-green{
-  display:inline-block;background:rgba(46,204,113,0.15);color:var(--green);
-  padding:3px 10px;border-radius:3px;font-family:var(--mono);font-size:11px;
-  white-space:nowrap;border:1px solid rgba(46,204,113,0.2);
-}
-/* wrapper to allow horizontal scroll on small screens */
-.sensitivity-table-wrap{
-  width:100%;overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-  border-radius:8px;
-  /* subtle scroll hint shadow */
-  background:
-    linear-gradient(to right,rgba(5,14,8,1) 0%,transparent 6%) left,
-    linear-gradient(to left, rgba(5,14,8,1) 0%,transparent 6%) right;
-  background-attachment:local,local;
-}
-
-/* ---- MOBILE CARD VIEW (≤620px) ---- */
-@media(max-width:620px){
-  .sensitivity-table-wrap{background:none;overflow:visible;}
-  .sensitivity-table{display:block;}
-  .sensitivity-table thead{display:none;}
-  .sensitivity-table tbody{display:flex;flex-direction:column;gap:12px;}
-  .sensitivity-table tbody tr{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:0;
-    background:rgba(46,204,113,0.04);
-    border:1px solid rgba(46,204,113,0.15);
-    border-radius:10px;overflow:hidden;
-    padding:0;
-  }
-  .sensitivity-table tbody tr.base{
-    border-color:rgba(46,204,113,0.4);
-    background:rgba(46,204,113,0.07);
-  }
-  .sensitivity-table td{
-    padding:10px 14px;border-bottom:1px solid rgba(46,204,113,0.07);
-    font-size:13px;position:relative;
-  }
-  /* label injected via data-label attribute */
-  .sensitivity-table td::before{
-    content:attr(data-label);
-    display:block;
-    font-family:var(--mono);font-size:9px;letter-spacing:2px;
-    text-transform:uppercase;color:var(--green);margin-bottom:3px;
-    opacity:0.8;
-  }
-  /* Scenario spans full width */
-  .sensitivity-table td:first-child{
-    grid-column:1/-1;
-    background:rgba(46,204,113,0.06);
-    font-weight:700;color:var(--white);font-size:14px;
-    border-bottom:1px solid rgba(46,204,113,0.15);
-  }
-  .sensitivity-table td:first-child::before{display:none;}
-  /* Status spans full width too */
-  .sensitivity-table td:last-child{
-    grid-column:1/-1;
-    border-bottom:none;
-    background:rgba(46,204,113,0.03);
-  }
-}
+.sensitivity-table tr.base td{color:var(--white);}
+.pill-green{display:inline-block;background:rgba(46,204,113,0.15);color:var(--green);padding:2px 8px;border-radius:3px;font-family:var(--mono);font-size:11px;}
 
 /* ============================================================
    PRICING
@@ -444,8 +365,8 @@ footer{background:rgba(0,0,0,0.6);border-top:1px solid rgba(46,204,113,0.1);padd
 @media(max-width:900px){
   .nav-links,.nav-cta{display:none;}
   .hamburger{display:flex;}
-  .hero-section{padding:100px 5% 70px;min-height:auto;}
-  .hero-container,.about-container,.contact-container{grid-template-columns:1fr;gap:40px;}
+  .hero-section{padding:120px 6% 80px;min-height:auto;}
+  .hero-container,.about-container,.contact-container{grid-template-columns:1fr;gap:50px;}
   .hero-left h1{font-size:34px;}
   .hero-buttons{flex-wrap:wrap;}
   .process-grid{grid-template-columns:1fr 1fr;}
@@ -456,35 +377,12 @@ footer{background:rgba(0,0,0,0.6);border-top:1px solid rgba(46,204,113,0.1);padd
   .footer-bottom{flex-direction:column;gap:8px;text-align:center;}
   .kpi-row,.fin-kpi-row{grid-template-columns:1fr 1fr;}
   .section-title{font-size:30px;}
-  .chart-wrap{height:200px;}
-  .chart-wrap-full{height:220px;}
-  .radar-wrap{height:240px;}
-  .market-section,.financial-section,.about-section,.platform-section,
-  .pricing-section,.faq-section,.contact-section,.process-section{padding:80px 5%;}
-  .fin-intro,.market-intro,.platform-sub,.pricing-sub{font-size:15px;margin-bottom:36px;}
-  .hero-card{padding:22px;}
-  .sensitivity-table th,.sensitivity-table td{padding:11px 14px;}
 }
 @media(max-width:600px){
   .process-grid{grid-template-columns:1fr;}
   .stats-grid{grid-template-columns:1fr 1fr;}
   .kpi-row,.fin-kpi-row{grid-template-columns:1fr;}
   .about-features{grid-template-columns:1fr;}
-  .hero-left h1{font-size:28px;}
-  .section-title{font-size:26px;}
-  .kpi-val{font-size:28px;}
-  .stat-num{font-size:32px;}
-  .chart-wrap{height:180px;}
-  .chart-wrap-full{height:200px;}
-  .fk-val{font-size:26px;}
-  .fin-kpi{padding:18px;}
-  .hero-section{padding:90px 5% 60px;}
-  .market-section,.financial-section,.about-section,.platform-section,
-  .pricing-section,.faq-section,.contact-section,.process-section{padding:60px 5%;}
-  .price-card{padding:24px;}
-  .contact-form{padding:22px;}
-  .founder-box{padding:24px;}
-  .btn-green,.btn-outline-green{padding:11px 22px;font-size:11px;}
 }
 </style>
 </head>
@@ -895,7 +793,6 @@ footer{background:rgba(0,0,0,0.6);border-top:1px solid rgba(46,204,113,0.1);padd
       <!-- Sensitivity Table -->
       <div class="chart-card-full" style="margin-top:0;">
         <div class="chart-title" style="margin-bottom:16px;">Sensitivity Summary Table</div>
-        <div class="sensitivity-table-wrap">
         <table class="sensitivity-table">
           <thead>
             <tr>
@@ -908,44 +805,42 @@ footer{background:rgba(0,0,0,0.6);border-top:1px solid rgba(46,204,113,0.1);padd
           </thead>
           <tbody>
             <tr class="base">
-              <td>📊 Base Case</td>
-              <td data-label="Revenue (£)">464,150</td>
-              <td data-label="Net Profit (£)">35,970</td>
-              <td data-label="Net Margin">7.75%</td>
-              <td data-label="Status"><span class="pill-green">✓ Base</span></td>
+              <td>Base Case</td>
+              <td>464,150</td>
+              <td>35,970</td>
+              <td>7.75%</td>
+              <td><span class="pill-green">✓ Base</span></td>
             </tr>
             <tr>
-              <td>⬇ Slower Hardware Adoption (−15%)</td>
-              <td data-label="Revenue (£)">394,000</td>
-              <td data-label="Net Profit (£)">17,500</td>
-              <td data-label="Net Margin">4.4%</td>
-              <td data-label="Status"><span class="pill-green">✓ Profitable</span></td>
+              <td>Slower Hardware Adoption (−15%)</td>
+              <td>394,000</td>
+              <td>17,500</td>
+              <td>4.4%</td>
+              <td><span class="pill-green">✓ Profitable</span></td>
             </tr>
             <tr>
-              <td>⬇ Lower Subscription Uptake (−20%)</td>
-              <td data-label="Revenue (£)">436,000</td>
-              <td data-label="Net Profit (£)">22,000</td>
-              <td data-label="Net Margin">5.0%</td>
-              <td data-label="Status"><span class="pill-green">✓ Profitable</span></td>
+              <td>Lower Subscription Uptake (−20%)</td>
+              <td>436,000</td>
+              <td>22,000</td>
+              <td>5.0%</td>
+              <td><span class="pill-green">✓ Profitable</span></td>
             </tr>
             <tr>
-              <td>⬆ Higher Cost of Sales (+5 pts)</td>
-              <td data-label="Revenue (£)">464,150</td>
-              <td data-label="Net Profit (£)">14,000</td>
-              <td data-label="Net Margin">3.0%</td>
-              <td data-label="Status"><span class="pill-green">✓ Profitable</span></td>
+              <td>Higher Cost of Sales (+5 pts)</td>
+              <td>464,150</td>
+              <td>14,000</td>
+              <td>3.0%</td>
+              <td><span class="pill-green">✓ Profitable</span></td>
             </tr>
             <tr>
-              <td>⬆ Higher Payroll &amp; OPEX (+10%)</td>
-              <td data-label="Revenue (£)">464,150</td>
-              <td data-label="Net Profit (£)">19,000</td>
-              <td data-label="Net Margin">4.1%</td>
-              <td data-label="Status"><span class="pill-green">✓ Profitable</span></td>
+              <td>Higher Payroll & OPEX (+10%)</td>
+              <td>464,150</td>
+              <td>19,000</td>
+              <td>4.1%</td>
+              <td><span class="pill-green">✓ Profitable</span></td>
             </tr>
           </tbody>
         </table>
-        </div>
-        <p style="margin-top:12px;font-family:var(--mono);font-size:10px;color:rgba(122,191,160,0.5);letter-spacing:1px;">ALL SCENARIOS REMAIN PROFITABLE · YEAR 2 DOWNSIDE STRESS TESTS</p>
       </div>
 
     </div>
@@ -1084,7 +979,7 @@ footer{background:rgba(0,0,0,0.6);border-top:1px solid rgba(46,204,113,0.1);padd
       </div>
       <div class="contact-right">
         <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
-          <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+          <input type="hidden" name="access_key" value="bc2c97ba-b529-4782-874d-1d453055a8c0">
           <input type="hidden" name="subject" value="New GrowPod AI Enquiry">
           <div class="form-group"><label>Full Name</label><input type="text" name="name" placeholder="Your full name" required></div>
           <div class="form-group"><label>Email Address</label><input type="email" name="email" placeholder="your@email.com" required></div>
